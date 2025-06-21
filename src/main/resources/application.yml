@@ -1,0 +1,32 @@
+spring:
+  application:
+    name: user-service
+server:
+  port: 8084
+
+# application.yml example for Circuit Breaker
+resilience4j:
+  circuitbreaker:
+    instances:
+      user-service:
+        registerHealthIndicator: true
+        slidingWindowSize: 10
+        minimumNumberOfCalls: 5
+        failureRateThreshold: 50
+        waitDurationInOpenState: 10s # in the open state upto 10 sec it will not furhter calls to downstream api.
+        permittedNumberOfCallsInHalfOpenState: 3 #in the half open state only allows limited number request passthrough
+        #if any request fails it will go back to open state. again in the open state it will wait for
+        #10sec and will go to the halfopen state.
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include:
+          - health
+  health:
+    circuitbreakers:
+      enabled: true
+  endpoint:
+    health:
+      show-details: ALWAYS
