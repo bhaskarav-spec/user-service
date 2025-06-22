@@ -16,9 +16,10 @@ public class UserServiceImpl{
 
     @Autowired
     private RestTemplate restTemplate;
-    @CircuitBreaker(name = "user-service", fallbackMethod = "fallbackForMyService")
+    //@CircuitBreaker(name = "user-service", fallbackMethod = "fallbackForMyService")
     public List<Item> fetchCatalogDetails() {
-        return restTemplate.getForObject(catalogApiUrl,List.class);
+       return getAllItemsFromDB();
+        //return restTemplate.getForObject(catalogApiUrl,List.class);
     }
 
     public List<Item> fallbackForMyService(Exception e) {
